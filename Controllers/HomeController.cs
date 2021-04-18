@@ -1,37 +1,37 @@
-﻿using Currency.Models;
+﻿using CurrencyDbModel;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Currency.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        AppDbContext context;
+        public HomeController(AppDbContext context)
         {
-            _logger = logger;
+            this.context = context;
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IEnumerable<IActionResult>> Currencies()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        [HttpGet]
+        public async Task<IActionResult> Currencie(int? id)
         {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            if (id != null)
+            {
+                EntityCurrency entityCurrency = await context.EntityCurrencies.FirstOrDefaultAsync(x => x.Id == id);
+                if (entityCurrency != null)
+                {
+                    return View(entityCurrency);
+                }
+            }
+            return NotFound();
         }
     }
 }

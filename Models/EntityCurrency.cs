@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CurrencyDbModel
 {
-    class EntityCurrency
+    public class EntityCurrency
     {
         public int Id { get; set; }
         public string NumCode { get; set; }
