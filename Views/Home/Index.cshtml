@@ -1,8 +1,10 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model EntityCurrency
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div>
+    цена товара в россии:
+    <div>
+        <p>
+        @($"id = {Model.Id} NumCode = {Model.NumCode} CharCode = {Model.CharCode} Nominal = {Model.Nominal} Name = {Model.Name} Value = {Model.Value}")</p>
+      
+    </div>
 </div>

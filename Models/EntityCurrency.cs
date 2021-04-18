@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
-namespace CurrencyDbModel
+namespace Currency.Models
 {
-    public class EntityCurrency
+    public class EntityCurrency 
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string NumCode { get; set; }
         public string CharCode { get; set; }
         public int Nominal { get; set; }
