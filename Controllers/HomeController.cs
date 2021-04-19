@@ -13,18 +13,18 @@ namespace Currency.Controllers
     public class HomeController : Controller
     {
         IMemoryCache cache;
-        
+
         public HomeController(IMemoryCache cache)
         {
             this.cache = cache;
         }
         public IActionResult Index()
         {
-            if (!cache.TryGetValue("key_currency", out EntityCurrency model))
+            if (!cache.TryGetValue("key_currency", out ListCurrency model))
             {
                 throw new Exception("ПРОБЛЕМА В контроллере индекс");
             }
-            return View(model);
+            return View(model.entityCurrencies);
         }
 
 

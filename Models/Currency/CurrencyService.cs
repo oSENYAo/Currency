@@ -9,6 +9,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Xml;
+using System.Net;
 
 namespace Currency.Models
 {
@@ -32,17 +34,34 @@ namespace Currency.Models
 
                     XDocument xdocument = XDocument.Load("http://www.cbr.ru/scripts/XML_daily.asp");
 
-                    EntityCurrency entityCurrency = new EntityCurrency();
+                    ListCurrency listCurrency = new ListCurrency();
 
-                    entityCurrency.Id = Convert.ToString(xdocument.Elements("ValCurs").Elements("Valute").Attributes("ID").FirstOrDefault().Value);
-                    entityCurrency.NumCode = Convert.ToString(xdocument.Elements("ValCurs").Elements("Valute").Elements("NumCode").FirstOrDefault().Value);
-                    entityCurrency.CharCode = Convert.ToString(xdocument.Elements("ValCurs").Elements("Valute").Elements("CharCode").FirstOrDefault().Value);
-                    entityCurrency.Nominal = Convert.ToInt32(xdocument.Elements("ValCurs").Elements("Valute").Elements("Nominal").FirstOrDefault().Value);
-                    entityCurrency.Name = Convert.ToString(xdocument.Elements("ValCurs").Elements("Valute").Elements("Name").FirstOrDefault().Value);
-                    entityCurrency.Value = Convert.ToDecimal(xdocument.Elements("ValCurs").Elements("Valute").Elements("Value").FirstOrDefault().Value);
+                    //var count = xdocument.Elements("ValCurs").Elements("Valute").Attributes("ID").Count();
 
 
-                    Cache.Set("key_currency", entityCurrency, TimeSpan.FromMinutes(1440));
+
+                    //entityCurrency.Id = Convert.ToString(xdocument.Elements("ValCurs").Descendants().DescendantsAndSelf());
+
+
+                    var allBranch = xdocument.Elements("ValCurs").Nodes().ToList();
+
+                    listCurrency.entityCurrencies.AddRange(allBranch);
+
+
+
+
+
+
+
+
+                    //entityCurrency.NumCode = Convert.ToString(xdocument.Elements("ValCurs").Elements("Valute").Elements("NumCode").Select(x => x.Value));
+                    //entityCurrency.CharCode = Convert.ToString(xdocument.Elements("ValCurs").Elements("Valute").Elements("CharCode").Select(x => x.Value));
+                    //entityCurrency.Nominal = Convert.ToInt32(xdocument.Elements("ValCurs").Elements("Valute").Elements("Nominal").Select(x => x.Value));
+                    //entityCurrency.Name = Convert.ToString(xdocument.Elements("ValCurs").Elements("Valute").Elements("Name").Select(x => x.Value));
+                    //entityCurrency.Value = Convert.ToDecimal(xdocument.Elements("ValCurs").Elements("Valute").Elements("Value").Select(x => x.Value));
+
+
+                    Cache.Set("key_currency", listCurrency, TimeSpan.FromMinutes(1440));
                 }
                 catch (Exception)
                 {
