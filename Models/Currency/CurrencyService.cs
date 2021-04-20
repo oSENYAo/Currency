@@ -36,30 +36,30 @@ namespace Currency.Models
 
                     ListCurrency listCurrency = new ListCurrency();
 
-                    //var count = xdocument.Elements("ValCurs").Elements("Valute").Attributes("ID").Count();
-
-
-
-                    //entityCurrency.Id = Convert.ToString(xdocument.Elements("ValCurs").Descendants().DescendantsAndSelf());
-
-
+                    EntityCurrency entityCurrency = new EntityCurrency();
+                    
                     var allBranch = xdocument.Elements("ValCurs").Nodes().ToList();
+                    var allBranch2 = xdocument.Elements("ValCurs").Elements("Valute").ToList();
 
-                    listCurrency.entityCurrencies.AddRange(allBranch);
-
-
-
-
+                    //.Select(x => x.CreateReader()
+                    int result = Convert.ToInt32(allBranch2.Select(x => x.CreateReader().AttributeCount));
 
 
 
+                    //entityCurrency.Value1.AddRange(result);
 
+
+                    //var s = xdocument.Elements("ValCurs").Elements("Valute").Elements("NumCode").Select(x => x.Value);
+                    //listCurrency.entityCurrencies.AddRange(allBranch);
+
+                    #region
+                    entityCurrency.Id = Convert.ToString(xdocument.Elements("ValCurs").Elements("Valute").Select(x => x.CreateReader().Value));
                     //entityCurrency.NumCode = Convert.ToString(xdocument.Elements("ValCurs").Elements("Valute").Elements("NumCode").Select(x => x.Value));
                     //entityCurrency.CharCode = Convert.ToString(xdocument.Elements("ValCurs").Elements("Valute").Elements("CharCode").Select(x => x.Value));
                     //entityCurrency.Nominal = Convert.ToInt32(xdocument.Elements("ValCurs").Elements("Valute").Elements("Nominal").Select(x => x.Value));
                     //entityCurrency.Name = Convert.ToString(xdocument.Elements("ValCurs").Elements("Valute").Elements("Name").Select(x => x.Value));
                     //entityCurrency.Value = Convert.ToDecimal(xdocument.Elements("ValCurs").Elements("Valute").Elements("Value").Select(x => x.Value));
-
+                    #endregion
 
                     Cache.Set("key_currency", listCurrency, TimeSpan.FromMinutes(1440));
                 }

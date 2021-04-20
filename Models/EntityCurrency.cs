@@ -14,7 +14,8 @@ namespace Currency.Models
         public string CharCode { get; set; }
         public int Nominal { get; set; }
         public string Name { get; set; }
-        public decimal Value { get; set; }
+        public List<string> Value1 { get; set; } = new List<string>();
+        public decimal Value2 { get; set; }
        
     }
 }
