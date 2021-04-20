@@ -1,4 +1,5 @@
 ﻿using Currency.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,8 @@ using System.Text;
 
 namespace Currency.Data
 {
-    public class AppDbContext : DbContext
+    // Подкючение SQLite здесь а не в appsettings.json, т.к. я пару дней возился с этой СУБД (я с ней не знаком) и только этот вариант заработал.
+    public class AppDbContext : IdentityDbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {}

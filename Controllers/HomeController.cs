@@ -4,35 +4,53 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Currency.Controllers
 {
     public class HomeController : Controller
     {
-        //IMemoryCache cache;
+        private readonly AppDbContext context;
+        private readonly IMemoryCache cache;
 
-        //public HomeController(IMemoryCache cache)
-        //{
-        //    this.cache = cache;
-        //}
-        //public IActionResult Index()
-        //{
-        //    if (!cache.TryGetValue("key_currency", out EntityCurrency model))
-        //    {
-        //        throw new Exception("ПРОБЛЕМА В контроллере индекс");
-        //    }
-        //    return View(model.Value1);
-        //}
+        public HomeController(IMemoryCache cache)
+        {
+            this.cache = cache;
+        }
+        public IActionResult Index()
+        {
+            return RedirectToAction("Currencies");
+        }
 
 
-        //[HttpGet]
-        //public async Task<IEnumerable<IActionResult>> Currencies()
-        //{
-        //    return View();
-        //}
+        [HttpGet]
+        public  IActionResult Currencies()
+        {
+            if (!cache.TryGetValue("key_currency", out ListCurrency model))
+            {
+                throw new Exception("Problem in CurrencyService");
+            }
+            return View(model.entityCurrencies);
+        }
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> Currencie(int? NumCode)
+        {
+            if (NumCode != null)
+            {
+                EntityCurrency entityCurrency = await context.EntityCurrencies.FirstOrDefaultAsync(x => x.NumCode == NumCode);
+                if (entityCurrency != null)
+                {
+                    return View(entityCurrency);
+                }
+            }
+            return NotFound();
+        }
+
+
+        #region Реазизация пагинации
         //public async Task<IActionResult> Index(int page = 1)
         //{
         //    int pageSize = 3;   // количество элементов на странице
@@ -45,19 +63,6 @@ namespace Currency.Controllers
         //    EntityCurrency viewModel = new EntityCurrency();
         //    return View(viewModel);
         //}
-
-        //[HttpGet]
-        //public async Task<IActionResult> Currencie(int? id)
-        //{
-        //    if (id != null)
-        //    {
-        //        EntityCurrency entityCurrency = await context.EntityCurrencies.FirstOrDefaultAsync(x => x.Id == id);
-        //        if (entityCurrency != null)
-        //        {
-        //            return View(entityCurrency);
-        //        }
-        //    }
-        //    return NotFound();
-        //}
+        #endregion
     }
 }

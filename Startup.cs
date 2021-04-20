@@ -51,6 +51,7 @@ namespace Currency
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                // В ТЗ был указан URL: Get/... поэтому в этом варианте GET обязателен
                 endpoints.MapControllerRoute(
                     name: "Get",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

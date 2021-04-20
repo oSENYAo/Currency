@@ -1,17 +1,12 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Microsoft.EntityFrameworkCore;
-using System.Xml;
-using System.Net;
-
 namespace Currency.Models
 {
     public class CurrencyService : BackgroundService
@@ -23,6 +18,7 @@ namespace Currency.Models
             this.Cache = memory;
 
         }
+        // Временное хранения (Кэш) для xml-файля
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
@@ -36,24 +32,19 @@ namespace Currency.Models
 
                     ListCurrency listCurrency = new ListCurrency();
 
-                    EntityCurrency entityCurrency = new EntityCurrency();
                     
-                    var allBranch = xdocument.Elements("ValCurs").Nodes().ToList();
-                    var allBranch2 = xdocument.Elements("ValCurs").Elements("Valute").ToList();
+                    var allBranchs = xdocument.Elements("ValCurs").Nodes().ToList();
 
-                    //.Select(x => x.CreateReader()
-                    int result = Convert.ToInt32(allBranch2.Select(x => x.CreateReader().AttributeCount));
-
-
-
-                    //entityCurrency.Value1.AddRange(result);
-
-
+                    //EntityCurrency entityCurrency = new EntityCurrency();
+                    //var allBranch2 = xdocument.Elements("ValCurs").Elements("Valute").ToList();
+                    //var result = allBranch2.Select(x => x.CreateReader().AttributeCount);
                     //var s = xdocument.Elements("ValCurs").Elements("Valute").Elements("NumCode").Select(x => x.Value);
-                    //listCurrency.entityCurrencies.AddRange(allBranch);
+                    
+                    
+                    listCurrency.entityCurrencies.AddRange(allBranchs);
 
-                    #region
-                    entityCurrency.Id = Convert.ToString(xdocument.Elements("ValCurs").Elements("Valute").Select(x => x.CreateReader().Value));
+                    #region Объект (свойства) класса EntityCurrency(Первая реализация для установки значений)
+                    //entityCurrency.Id = Convert.ToString(xdocument.Elements("ValCurs").Elements("Valute").Select(x => x.Value));
                     //entityCurrency.NumCode = Convert.ToString(xdocument.Elements("ValCurs").Elements("Valute").Elements("NumCode").Select(x => x.Value));
                     //entityCurrency.CharCode = Convert.ToString(xdocument.Elements("ValCurs").Elements("Valute").Elements("CharCode").Select(x => x.Value));
                     //entityCurrency.Nominal = Convert.ToInt32(xdocument.Elements("ValCurs").Elements("Valute").Elements("Nominal").Select(x => x.Value));
@@ -65,7 +56,7 @@ namespace Currency.Models
                 }
                 catch (Exception)
                 {
-
+                    // Тут должно быть исключение (Конечно можно добавить ещё и Finally)
                 }
                 await Task.Delay(3600000,stoppingToken);
             }

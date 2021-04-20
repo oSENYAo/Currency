@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace Currency.Models
 {
+    // Класс для пагинации 
     public class PageViewModel
     {
         public int PageNumber { get; private set; }
