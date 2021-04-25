@@ -1,1 +1,12 @@
-﻿
+﻿@model IEnumerable<EntityCurrency>
+
+@foreach (var item in Model)
+{
+    <p>@item.Id</p>
+    <p>@item.NumCode</p>
+    <p>@item.CharCode</p>
+    <p>@item.Nominal</p>
+    <p>@item.Value</p>
+    <p>@item.Name</p>
+
+}

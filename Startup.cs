@@ -1,5 +1,6 @@
 using Currency.Data;
 using Currency.Models;
+using Currency.Models.Currency;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -20,7 +21,7 @@ namespace Currency
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHostedService<CurrencyService>();
+            services.AddHostedService<SecondSurrencyService>();
             services.AddMemoryCache();
             services.AddEntityFrameworkSqlite().AddDbContext<AppDbContext>(options => options.EnableSensitiveDataLogging());
             services.AddControllersWithViews();

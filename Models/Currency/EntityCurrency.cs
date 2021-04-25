@@ -7,15 +7,14 @@ using System.Xml.Linq;
 
 namespace Currency.Models
 {
-    public class EntityCurrency
+    public struct EntityCurrency
     {
         public string Id { get; set; }
         public int? NumCode { get; set; }
         public string CharCode { get; set; }
         public int Nominal { get; set; }
         public string Name { get; set; }
-        public List<string> Value1 { get; set; } = new List<string>();
-        public decimal Value2 { get; set; }
-       
+        public decimal Value { get; set; }
+        public ListEntity ListEntity { get; set; }
     }
 }
