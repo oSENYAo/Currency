@@ -1,82 +1,58 @@
 ﻿using Currency.Data;
 using Currency.Models;
 using Currency.Models.Currency;
+using Currency.Pagination;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Currency.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IMemoryCache cache;
-
-        public HomeController(IMemoryCache cache)
+        AppDbContext context;
+        public HomeController(AppDbContext context)
         {
-            this.cache = cache;
+            this.context = context;
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            var serializer = new XmlSerializer(typeof(ValCurs));
+            if (!context.ValCurses.Any())
+            {
+                using (var reader = new StreamReader(@"D:\repositivs\Currency\Info\XmlFile.xml"))
+                {
+                    var obj = serializer.Deserialize(reader) as ValCurs;
+                    context.ValCurses.UpdateRange(obj);
+                }
+            }
         }
-        [HttpGet]
-        public IActionResult Index()
+        
+        public async Task<IActionResult> Index(int page = 1)
         {
-            ListEntity listEntity = new ListEntity();
-            return View(listEntity.listEntities);
+            int pageSize = 3;
+
+            IQueryable<Valute> source = context.Valutes.Include(x => x.ValCurs);
+            var count = await source.CountAsync();
+            var items = await source.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            PageInfo pageInfo = new PageInfo(count, page, pageSize);
+            IndexViewModel viewModel = new IndexViewModel { PageInfo = pageInfo, Valutes = items };
+            //PageInfo pageInfo = new PageInfo { PageNumber = page, PageSize = pageSize, TotalItems = context.Valutes.Count() };
+            //IndexViewModel ivm = new IndexViewModel { PageInfo = pageInfo, Valutes = ValutesPerPages };
+            return View(viewModel);
         }
-        #region
-        //private readonly AppDbContext context;
-        //private readonly IMemoryCache cache;
 
-        //public HomeController(IMemoryCache cache)
-        //{
-        //    this.cache = cache;
-        //}
-        //public IActionResult Index()
-        //{
-        //    return RedirectToAction("Currencies");
-        //}
+        [HttpPost]
+        public IActionResult Test()
+        {
+            return View();
+        }
 
-
-        //[HttpGet]
-        //public  IActionResult Currencies()
-        //{
-        //    if (!cache.TryGetValue("key_currency", out ListCurrency model))
-        //    {
-        //        throw new Exception("Problem in CurrencyService");
-        //    }
-        //    return View(model.entityCurrencies);
-        //}
-
-
-
-        //[HttpGet]
-        //public async Task<IActionResult> Currencie(int? NumCode)
-        //{
-        //    if (NumCode != null)
-        //    {
-        //        EntityCurrency entityCurrency = await context.EntityCurrencies.FirstOrDefaultAsync(x => x.NumCode == NumCode);
-        //        if (entityCurrency != null)
-        //        {
-        //            return View(entityCurrency);
-        //        }
-        //    }
-        //    return NotFound();
-        //}
-        #endregion
-
-        #region Реазизация пагинации
-        //public async Task<IActionResult> Index(int page = 1)
-        //{
-        //    int pageSize = 3;   // количество элементов на странице
-
-        //    IQueryable<EntityCurrency> source = context.EntityCurrencies.Include(x => x.Name);
-        //    var count = await source.CountAsync();
-        //    var items = await source.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
-
-        //    PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
-        //    EntityCurrency viewModel = new EntityCurrency();
-        //    return View(viewModel);
-        //}
-        #endregion
     }
 }
