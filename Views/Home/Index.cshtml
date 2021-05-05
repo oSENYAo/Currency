@@ -67,3 +67,17 @@
         <i class="glyphicon glyphicon-chevron-right"></i>
     </a>
 }
+<br />
+@if (User.Identity.IsAuthenticated)
+{
+    <p>ты зареган</p>
+    <form method="post" asp-controller="Account" asp-action="Logout">
+        <input type="submit" value="Выйти" />
+    </form>
+}
+else
+{
+    <a asp-controller="Account" asp-action="Login">Войти</a>
+    <a asp-controller="Account" asp-action="Register">Зарегестрироваться</a>
+
+}

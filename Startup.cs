@@ -1,6 +1,8 @@
+using Currency.AreaIdentity;
 using Currency.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +23,7 @@ namespace Currency
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<AppDbContext>(connect => connect.UseSqlServer(connection));
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
             services.AddControllersWithViews();
         }
 
@@ -41,6 +44,7 @@ namespace Currency
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
