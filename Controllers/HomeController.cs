@@ -23,19 +23,32 @@ namespace Currency.Controllers
             this.context = context;
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             var serializer = new XmlSerializer(typeof(ValCurs));
-            if (!context.ValCurses.Any())
+            if (!context.Valutes.Any())
             {
                 using (var reader = new StreamReader(@"D:\repositivs\Currency\Info\XmlFile.xml"))
                 {
                     var obj = serializer.Deserialize(reader) as ValCurs;
                     context.ValCurses.UpdateRange(obj);
+                    context.SaveChanges();
                 }
             }
         }
         
-        public async Task<IActionResult> Index(int page = 1)
+        public IActionResult Index()
         {
-            int pageSize = 3;
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Currencies", "Home");
+            }
+            else
+            {
+                return View();
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> Currencies(int page = 1)
+        {
+            int pageSize = 10;
 
             IQueryable<Valute> source = context.Valutes.Include(x => x.ValCurs);
             var count = await source.CountAsync();
@@ -43,16 +56,31 @@ namespace Currency.Controllers
 
             PageInfo pageInfo = new PageInfo(count, page, pageSize);
             IndexViewModel viewModel = new IndexViewModel { PageInfo = pageInfo, Valutes = items };
-            //PageInfo pageInfo = new PageInfo { PageNumber = page, PageSize = pageSize, TotalItems = context.Valutes.Count() };
-            //IndexViewModel ivm = new IndexViewModel { PageInfo = pageInfo, Valutes = ValutesPerPages };
             return View(viewModel);
         }
 
+
+
         [HttpPost]
-        public IActionResult Test()
+        public IActionResult Currencies(string name)
         {
-            return View();
+            return RedirectToAction("Currency", new { name = name });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Currency(string name)
+        {
+            Valute valute;
+
+            valute = await context.Valutes.FirstOrDefaultAsync(x => x.Name == name);
+            if (valute != null)
+            {
+                return View(valute);
+            }
+            else
+            {
+                return Content("Данная валюта не была найдена. Повторите попытку.");
+            }
+        }
     }
 }

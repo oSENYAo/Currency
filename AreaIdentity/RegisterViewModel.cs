@@ -11,9 +11,9 @@ namespace Currency.AreaIdentity
         [Required]
         [Display(Name ="Email")]
         public string Email { get; set; }
-        //[Required]
-        //[Display(Name = "Год рождения")]
-        //public int ForeignYear { get; set; }
+        [Required]
+        [Display(Name = "Год рождения")]
+        public int ForeignYear { get; set; }
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Пароль")]

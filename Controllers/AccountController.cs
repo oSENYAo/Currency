@@ -1,10 +1,6 @@
 ﻿using Currency.AreaIdentity;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Currency.Controllers
@@ -30,7 +26,7 @@ namespace Currency.Controllers
             if (ModelState.IsValid)
             {
                 User user = new User { Email = model.Email, 
-                    //ForeignYear = model.ForeignYear, 
+                    ForeignYear = model.ForeignYear, 
                     UserName = model.Email };
                 var result = await userManager.CreateAsync(user,model.Password);
                 if (result.Succeeded)

@@ -1,0 +1,79 @@
+﻿@model Currency.Pagination.IndexViewModel
+<style>
+    @@font-face {
+        font-family: 'FontAwesome';
+        src: url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2') format('woff2'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff') format('woff'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal
+    }
+
+    .glyphicon {
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale
+    }
+
+    .glyphicon-chevron-right:before {
+        content: "\f054";
+    }
+
+    .glyphicon-chevron-left:before {
+        content: "\f053";
+    }
+</style>
+<table class="table">
+    <tr>
+        <td>ID валюты</td>
+        <td>Международный код</td>
+        <td>Сокращенное название</td>
+        <td>Номинал</td>
+        <td>Полное название</td>
+        <td>Курс относительно к рублю</td>
+    </tr>
+    @foreach (var item in Model.Valutes)
+    {
+        <tr>
+            <td class="border">@item.MainCode</td>
+            <td>@item.NumCode</td>
+            <td>@item.CharCode</td>
+            <td>@item.Nominal</td>
+            <td>@item.Name</td>
+            <td>@item.Value</td>
+        </tr>
+    }
+</table>
+
+<br />
+
+<form method="post">
+    <p>
+        <label>Название валюты:</label><br />
+        <input type="text" name="name" />
+        <input type="submit" value="Получить информацию" />
+    </p>
+</form>
+
+<br />
+
+@if (Model.PageInfo.HasPreviousPage)
+{
+    <a asp-action="Currencies"
+       asp-route-page="@(Model.PageInfo.PageNumber - 1)"
+       class="btn btn-outline-dark">
+        <i class="glyphicon glyphicon-chevron-left"></i>
+        Назад
+    </a>
+}
+@if (Model.PageInfo.HasNextPage)
+{
+    <a asp-action="Currencies"
+       asp-route-page="@(Model.PageInfo.PageNumber + 1)"
+       class="btn btn-outline-dark">
+        Вперед
+        <i class="glyphicon glyphicon-chevron-right"></i>
+    </a>
+}
+<br />

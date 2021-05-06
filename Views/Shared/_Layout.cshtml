@@ -3,11 +3,22 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
     <title>@ViewBag.Title</title>
 </head>
 <body>
     <div>
         @RenderBody()
+        
+        <br />
+
+        @if (User.Identity.IsAuthenticated)
+        {
+        <form method="post" asp-controller="Account" asp-action="Logout">
+            <input type="submit" value="Выход" />
+        </form>
+        }
+        
     </div>
 </body>
 </html>

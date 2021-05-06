@@ -1,0 +1,20 @@
+﻿@model Currency.Models.Valute
+
+    <table class="table">
+        <tr>
+            <td>ID валюты</td>
+            <td>Международный код</td>
+            <td>Сокращенное название</td>
+            <td>Номинал</td>
+            <td>Полное название</td>
+            <td>Курс относительно к рублю</td>
+        </tr>
+        <tr>
+            <td class="border">@Model.MainCode</td>
+            <td>@Model.NumCode</td>
+            <td>@Model.CharCode</td>
+            <td>@Model.Nominal</td>
+            <td>@Model.Name</td>
+            <td>@Model.Value</td>
+        </tr>
+    </table>
