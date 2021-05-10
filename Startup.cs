@@ -1,5 +1,6 @@
 using Currency.AreaIdentity;
 using Currency.Data;
+using Currency.Info;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -24,6 +25,8 @@ namespace Currency
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<AppDbContext>(connect => connect.UseSqlServer(connection));
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+            services.AddHostedService<InfoService>();
+            services.AddMemoryCache();
             services.AddControllersWithViews();
         }
 

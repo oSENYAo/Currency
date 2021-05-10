@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
@@ -17,25 +18,31 @@ namespace Currency.Controllers
 {
     public class HomeController : Controller
     {
-        AppDbContext context;
-        public HomeController(AppDbContext context)
+        private readonly AppDbContext context;
+        private readonly IMemoryCache cache;
+
+        public HomeController(AppDbContext context, IMemoryCache cache)
         {
             this.context = context;
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            var serializer = new XmlSerializer(typeof(ValCurs));
-            if (!context.Valutes.Any())
+            this.cache = cache;
+        }
+        public async Task<IActionResult> Index()
+        {
+            var dateDb = context.ValCurses.Select(x => x.Date).ToList().LastOrDefault();
+            if (cache.TryGetValue("key", out string DateXml))
             {
-                using (var reader = new StreamReader(@"D:\repositivs\Currency\Info\XmlFile.xml"))
+                if (DateXml != dateDb)
                 {
-                    var obj = serializer.Deserialize(reader) as ValCurs;
-                    context.ValCurses.UpdateRange(obj);
-                    context.SaveChanges();
+                    var serializer = new XmlSerializer(typeof(ValCurs));
+                    using (var reader = new StreamReader(@"D:\repositivs\Currency\Info\NewXmlFile.xml",Encoding.GetEncoding(1251)))
+                    {
+                        var obj = serializer.Deserialize(reader) as ValCurs;
+                        context.ValCurses.UpdateRange(obj);
+                        await context.SaveChangesAsync();
+                    }
+
                 }
             }
-        }
-        
-        public IActionResult Index()
-        {
             if (User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Currencies", "Home");
@@ -44,7 +51,9 @@ namespace Currency.Controllers
             {
                 return View();
             }
+            
         }
+
         [HttpGet]
         public async Task<IActionResult> Currencies(int page = 1)
         {
@@ -56,6 +65,7 @@ namespace Currency.Controllers
 
             PageInfo pageInfo = new PageInfo(count, page, pageSize);
             IndexViewModel viewModel = new IndexViewModel { PageInfo = pageInfo, Valutes = items };
+            ViewBag.Date = context.ValCurses.Select(x => x.Date).ToList().LastOrDefault();
             return View(viewModel);
         }
 
@@ -83,4 +93,4 @@ namespace Currency.Controllers
             }
         }
     }
-}
+} 
