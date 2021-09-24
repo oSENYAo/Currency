@@ -26,6 +26,10 @@ namespace Currency.Controllers
             this.context = context;
             this.cache = cache;
         }
+        public IActionResult RemoteView()
+        {
+            return View();
+        }
         public async Task<IActionResult> Index()
         {
             var dateDb = context.ValCurses.Select(x => x.Date).ToList().LastOrDefault();
