@@ -35,7 +35,7 @@ namespace Currency.Info
                     Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
                     // скачиваем через веб
                     WebClient client = new WebClient();
-                    client.DownloadFileAsync(uri, @"D:\repositivs\Currency_World\Info\NewXmlFile.xml");
+                    client.DownloadFileAsync(uri, Directory.GetCurrentDirectory()+"/NewXmlFile.xml");
                     // скачиваем через xml
                     XDocument xDocument = XDocument.Load(UriAdress);
                     // ищем дату в xml и в БД

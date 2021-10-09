@@ -5,12 +5,9 @@ using Currency.Pagination;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
@@ -38,13 +35,12 @@ namespace Currency.Controllers
                 if (DateXml != dateDb)
                 {
                     var serializer = new XmlSerializer(typeof(ValCurs));
-                    using (var reader = new StreamReader(@"D:\repositivs\Currency\Info\NewXmlFile.xml",Encoding.GetEncoding(1251)))
+                    using (var reader = new StreamReader(Directory.GetCurrentDirectory() + "/NewXmlFile.xml", Encoding.GetEncoding(1251)))
                     {
                         var obj = serializer.Deserialize(reader) as ValCurs;
                         context.ValCurses.UpdateRange(obj);
                         await context.SaveChangesAsync();
                     }
-
                 }
             }
             if (User.Identity.IsAuthenticated)
@@ -55,7 +51,6 @@ namespace Currency.Controllers
             {
                 return View();
             }
-            
         }
 
         [HttpGet]

@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Currency", "Currency.csproj", "{7C77127D-AD00-4753-B3DD-53F089C20171}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Currency", "Currency.csproj", "{7C77127D-AD00-4753-B3DD-53F089C20171}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{D1457E46-E55D-49DD-8CDB-E296FF3A5FA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Currency.Identity", "..\Currency.Identity\Currency.Identity.csproj", "{4BB3A6F1-12B8-42AE-A642-D373592D3342}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +19,16 @@ Global
 		{7C77127D-AD00-4753-B3DD-53F089C20171}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C77127D-AD00-4753-B3DD-53F089C20171}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C77127D-AD00-4753-B3DD-53F089C20171}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BB3A6F1-12B8-42AE-A642-D373592D3342}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BB3A6F1-12B8-42AE-A642-D373592D3342}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BB3A6F1-12B8-42AE-A642-D373592D3342}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BB3A6F1-12B8-42AE-A642-D373592D3342}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4BB3A6F1-12B8-42AE-A642-D373592D3342} = {D1457E46-E55D-49DD-8CDB-E296FF3A5FA2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3A56186E-59CD-4720-834D-3B34DAF9B447}

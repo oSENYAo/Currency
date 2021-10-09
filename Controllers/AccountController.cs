@@ -14,6 +14,7 @@ namespace Currency.Controllers
             this.userManager = userManager;
             this.signInManager = signInManager;
         }
+        
         [HttpGet]
         public ActionResult Register()
         {
